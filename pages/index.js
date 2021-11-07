@@ -1,17 +1,10 @@
 import Head from "next/head";
 import { PostCard, PostWidget, Categories } from "../components/";
-const posts = [
-  {
-    title: "react tasting",
-    excerpt: "learn react",
-  },
-  {
-    title: "react tailwind",
-    excerpt: "learn react tailwind",
-  },
-];
+import {getPosts} from '../services'
 
-export default function Home() {
+
+export default function Home({posts}) {
+  console.log(posts)
   return (
     <div className="container mx-auto px-10 mb-8 ">
       <Head>
@@ -20,7 +13,7 @@ export default function Home() {
       </Head>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="lg:col-span-8 col-span-1">
-          {posts.map((post, index) => (
+          {posts?.map((post, index) => (
             <div>
               <PostCard post={post} key={index} />
             </div>
@@ -36,4 +29,13 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+// Fetch data at build time
+export async function getStaticProps() {
+  const posts = (await getPosts()) || [];
+  return {
+    props: { posts },
+
+  };
 }
